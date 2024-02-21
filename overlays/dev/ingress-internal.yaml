@@ -1,0 +1,32 @@
+---
+# Expose typesense service at typesense-dev-internal.k8s.siminn.tv
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: typesense
+  labels:
+    name: typesense
+  annotations:
+    # alb.ingress.kubernetes.io/scheme: internal
+    # alb.ingress.kubernetes.io/load-balancer-name: tv-dev-internal
+    # alb.ingress.kubernetes.io/group.name: tv-dev-internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    # alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.xff_header_processing.mode=append, idle_timeout.timeout_seconds=120
+    external-dns.alpha.kubernetes.io/ttl: "60"
+
+spec:
+  ingressClassName: tv-internal
+  rules:
+  - host: typesense-internal.dev.siminn.tv
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: typesense-svc
+            port: 
+              number: 8108
