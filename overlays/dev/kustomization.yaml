@@ -1,5 +1,6 @@
 resources:
   - ../../base
+#  - ingress-internal.yaml
 
 # namespace where typesense will be installed
 namespace: typesense
@@ -9,9 +10,6 @@ patches:
     kind: StatefulSet
     name: typesense
   patch: |-
-    - op: replace
-      path: /spec/template/spec/containers/0/image
-      value: typesense/typesense:0.21.0.rc-k8s-2
     - op: replace
       path: /spec/replicas
       value: 3
@@ -23,19 +21,19 @@ patches:
       value: "10Gi"
     - op: replace
       path: /spec/template/spec/containers/0/resources/requests/memory
-      value: "112Mi"
+      value: "4Gi"
     - op: replace
       path: /spec/template/spec/containers/0/resources/requests/cpu
-      value: "128m"
+      value: "512m"
     - op: replace
       path: /spec/template/spec/containers/0/resources/limits/memory
-      value: "512Mi"
+      value: "4Gi"
     - op: replace
       path: /spec/template/spec/containers/0/resources/limits/cpu
       value: "1024m"
     - op: replace
       path: /spec/template/spec/containers/0/command/4
-      value: Mycomplexpassword#6546
+      value: xyz
 
 # Add to the nodes list here if you change the number of replicas in statefulset
 - target:
@@ -47,4 +45,6 @@ patches:
       value: "typesense-0.ts.typesense.svc.cluster.local:8107:8108,typesense-1.ts.typesense.svc.cluster.local:8107:8108,typesense-2.ts.typesense.svc.cluster.local:8107:8108"
 
 
-
+images:
+  - name: typesense/typesense
+    newTag: 0.25.2    

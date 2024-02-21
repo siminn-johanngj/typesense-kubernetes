@@ -93,6 +93,7 @@ spec:
           - "8107"
           - "--nodes"
           - "/usr/share/typesense/nodes"
+          - "--reset-peers-on-error"
         ports:
         - containerPort: 8108
           name: http
